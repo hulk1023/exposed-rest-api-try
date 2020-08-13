@@ -1,0 +1,22 @@
+import "google/protobuf/empty.proto";
+
+syntax = "proto3";
+
+package registry;
+
+service RegistryService {
+    rpc SequenceNumber(Category) returns (RegisterNumber) {}
+    rpc ListSequence(google.protobuf.Empty) returns (RegistryList) {}
+}
+
+message Category {
+    string category = 1;
+}
+
+message RegisterNumber {
+    int32 sequence = 1; 
+}
+
+message RegistryList {
+    map<string, int32> fields = 1; 
+}

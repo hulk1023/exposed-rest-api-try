@@ -1,32 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit, Inject } from '@nestjs/common';
 import {
-  ClientProxyFactory,
-  Transport,
-  ClientProxy,
+  ClientGrpc,
 } from '@nestjs/microservices';
+import { Observable } from 'rxjs';
+import { IRegisterService } from './models/IRegisterService';
+import { RegisterNumber } from './models/RegisterNumber';
+import { RegistryList } from './models/RegistryList';
 
 
 @Injectable()
-export class AppService {
-  private client: ClientProxy;
+export class AppService implements OnModuleInit{
+  private registryService: IRegisterService;
 
-  constructor() {
-    this.client = ClientProxyFactory.create({
-      transport: Transport.TCP,
-      options: {
-        host: 'localhost',
-        port: 4000,
-      }
-    });
+  constructor(@Inject('RegistryService_PKG') private client: ClientGrpc) {}
+
+  onModuleInit() {
+    this.registryService = this.client.getService<IRegisterService>('RegistryService');
   }
 
-  public RegisterNumber(category: string): Promise<number> {
-    var pattern = {action:'seqence'}
-    return this.client.send<number, string>(pattern, category).toPromise();
+  public RegisterNumber(category: string): Observable<RegisterNumber> {
+    var data = { category: category}
+    return this.registryService.sequenceNumber(data);
   }  
 
-  public ListRegister(): Promise<any> {
-    var pattern = {action:'list-sequence'}
-    return this.client.send<any, any>(pattern, '').toPromise();
+  public ListRegister(): Observable<RegistryList> {
+    return this.registryService.listSequence(null);
   }  
 }
