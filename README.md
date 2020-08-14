@@ -26,7 +26,33 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+這是 一個掛號機 的範例，它提供底下2個HTTP 資源供取號:
+1. GET http://localhost:3000/register?category=xxx
+2. GET http://localhost:3000/list
+
+- 如何取號:
+使用HTTP GET (在瀏灠器網址列輸入), 如 http://localhost:3000/register?category=surgery
+category 可接受...
+1. surgery
+2. internal
+3. emergency
+
+- 列出最新的取號列表:
+使用HTTP GET (在瀏灠器網址列輸入) => http://localhost:3000/list
+即返回如底下的JSON 格式資料...
+
+  {
+    fields: {
+      "surgery": 1,
+      "internal": 1,
+      "emergency": 1,
+    }
+  }
+
+
+### 此範例***要搭配底下 微服務 範例***來展示；2個範例服務 ***一起運行在同台機器***:
+
+[internal-microservice-try](https://github.com/hulk1023/internal-microservice-try)
 
 ## Installation
 
